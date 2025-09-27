@@ -1,0 +1,76 @@
+Issue Type,Summary,Description,Epic Name,Epic Link,Priority,Labels,Components,Story Points,Acceptance Criteria
+Epic,Foundation & DevOps,"Set up repos, local dev environment, CI/CD, environments, branching strategy, and project governance.
+",EPIC-FOUNDATION,,High,"platform,devops",infra,,
+Epic,Backend API (Django + DRF),"Build core backend services with Django REST Framework: models, serializers, viewsets, auth, and pagination.
+",EPIC-BACKEND,,High,"backend,api",backend,,
+Epic,Frontend Web (React/Next.js),"Implement user-facing web app with React (Next.js recommended for SEO), routing, state, and UI components.
+",EPIC-FRONTEND,,High,"frontend,web",frontend,,
+Epic,Content Ingestion & Metadata,"Integrate metadata APIs (e.g., TMDb/OMDb), normalize movie data, and schedule ingestion/refresh jobs.
+",EPIC-INGESTION,,High,"ingestion,metadata","backend,ingestion",,
+Epic,Auth & Accounts,"Implement secure authentication, verification, profiles, watchlist/favorites, and history tracking.
+",EPIC-AUTH,,High,"auth,accounts","backend,frontend",,
+Epic,Playback & Assets,"Handle playable video assets (embeds or hosted), captions/subtitles, and continue-watching.
+",EPIC-PLAYBACK,,Medium,"video,assets","frontend,backend",,
+Epic,"UX, Accessibility & SEO","Create a performant, responsive, accessible UI (WCAG AA), and basic SEO for public pages.
+",EPIC-UX,,Medium,"ux,a11y,seo",frontend,,
+Epic,Analytics & Observability,"Track user engagement, set up error monitoring and logs/metrics dashboards for services and jobs.
+",EPIC-ANALYTICS,,Medium,"analytics,observability","frontend,backend,infra",,
+Epic,Admin & CMS,"Admin tools for managing catalog, collections, images, and editorial content.
+",EPIC-ADMIN,,Medium,"admin,cms","backend,frontend",,
+Epic,"Legal, Compliance & Policies","Content rights tracking, privacy policy, GDPR basics (export/delete), terms of service, and takedown process.
+",EPIC-COMPLIANCE,,Medium,"compliance,legal","infra,backend",,
+Story,Decide metadata API and request API keys (TMDb vs OMDb),"Evaluate TMDb and OMDb for licensing, rate limits, and image usage. Create accounts and obtain API keys.",,EPIC-INGESTION,High,"decision,metadata",ingestion,2,"- Decision documented in README
+- API keys stored in env (not committed)
+- Rate limit notes added"
+Story,Decide playable content approach (public-domain archives vs embeds vs hosted),Select initial playable content sources with clear licensing and a takedown process.,,EPIC-PLAYBACK,High,"decision,video","backend,frontend",2,"- Source(s) chosen and documented
+- Licensing notes added to Asset.license
+- Takedown steps documented"
+Story,Create monorepo and Dockerized local dev environment,"Initialize monorepo with /frontend and /backend, Docker Compose for DB/Redis, makefile scripts.",,EPIC-FOUNDATION,High,"devops,setup",infra,3,"- `docker compose up` brings services up
+- README: getting started steps
+- .env.example files exist"
+Story,"Set up CI (GitHub Actions) for lint, tests, and build","Add pipelines to run backend/ frontend linting, unit tests, and build on PRs.",,EPIC-FOUNDATION,High,"ci,devops",infra,3,"- CI runs on PR
+- Status checks required before merge"
+Story,Scaffold Django project and DRF configuration,"Create Django project, install DRF, configure pagination, CORS, and settings for Postgres.",,EPIC-BACKEND,High,"backend,setup",backend,3,"- Server runs locally
+- Health endpoint returns 200"
+Story,"Implement core models: Movie, Genre, Collection",Create models and migrations for catalog entities with admin registration.,,EPIC-BACKEND,High,"backend,models",backend,5,"- Migrations apply
+- Admin shows models
+- Basic unit tests pass"
+Story,"JWT authentication with registration, login, logout, password reset",Add JWT auth endpoints and email-based flows; secure password hashing.,,EPIC-AUTH,High,"auth,security",backend,5,"- Register/login endpoints documented
+- Tokens refresh/rotate
+- Negative tests for bad creds"
+Story,"REST endpoints for movies, genres, collections (list, detail, filters)","Implement serializers/viewsets with filtering by genre, year, rating, runtime.",,EPIC-BACKEND,High,"api,filters",backend,5,"- GET endpoints return paginated results
+- Filter params documented
+- Tests for filters and pagination"
+Story,"User features API: favorites, watchlist, and history","Endpoints to manage user favorites, watchlist, and playback history.",,EPIC-AUTH,Medium,"api,users",backend,5,"- POST/DELETE favorites/watchlist
+- History updates last_position
+- Permissions enforced"
+Story,Ingestion worker: fetch & normalize metadata from chosen API,"Celery task to ingest movies by ID/query, with rate limiting and caching.",,EPIC-INGESTION,High,"ingestion,celery","ingestion,backend",8,"- Command kicks off import
+- Records stored with provenance
+- Errors retried/backed off"
+Story,Scaffold Next.js app with Tailwind and routing,"Create base layout, theme, and routing structure (home, catalog, details, auth).",,EPIC-FRONTEND,High,"frontend,setup",frontend,3,"- Pages render locally
+- Shared header/footer components"
+Story,Catalog grid with search and filters,"Connect to API, show poster grid with pagination, client-side search/filters.",,EPIC-FRONTEND,High,"catalog,ui",frontend,5,"- Grid paginates
+- Filters update results
+- Loading/empty states handled"
+Story,Movie detail page with metadata and trailer,"Display details, cast/crew, similar titles, and embedded trailer if available.",,EPIC-FRONTEND,High,"details,ui",frontend,5,"- Detail page loads by slug
+- Trailer embed renders
+- Similar titles section present"
+Story,"Auth UI: signup, login, forgot/reset password","Forms with validation, success/error messaging, and integration with JWT endpoints.",,EPIC-AUTH,High,"auth,ui",frontend,5,"- Forms validate client-side
+- Tokens stored securely
+- Redirects after login/logout"
+Story,User library: favorites and watchlist pages,Profile area listing favorites/watchlist with remove actions.,,EPIC-AUTH,Medium,"library,ui",frontend,3,"- Lists render and sync
+- Empty and error states covered"
+Story,Video playback component with caption support,Reusable player that supports HTML5 and common embed providers; load VTT captions when available.,,EPIC-PLAYBACK,Medium,"video,ui",frontend,5,"- Play/pause/seek work
+- Captions toggleable
+- Fallback for unsupported embeds"
+Story,Accessibility pass for core pages (WCAG AA),"Keyboard navigation, focus states, aria labels, color contrast on home, catalog, details, auth.",,EPIC-UX,Medium,"a11y,ux",frontend,3,"- Axe tests pass for key pages
+- Keyboard-only nav works"
+Story,Basic SEO for public pages,"Meta tags, Open Graph, sitemaps/robots, clean slugs, and pre-rendering for key routes.",,EPIC-UX,Medium,seo,frontend,3,"- Title/description per page
+- OG tags valid
+- Sitemap generated"
+Story,Add web analytics and error monitoring,"Integrate lightweight analytics (e.g., Plausible) and Sentry-style error tracking for FE/BE.",,EPIC-ANALYTICS,Medium,"analytics,monitoring","frontend,backend",3,"- Page views recorded
+- Errors visible in dashboard"
+Story,"Admin: manage movies, genres, and collections",Use Django Admin to CRUD catalog entities and order collection items.,,EPIC-ADMIN,Medium,"admin,cms",backend,3,"- Admin CRUD works
+- Collections orderable"
+Story,"Add privacy policy, terms, and takedown page","Static pages and backend endpoints for privacy, terms, and content takedown requests.",,EPIC-COMPLIANCE,Low,"legal,compliance","frontend,backend",2,"- Pages published
+- Contact/takedown form submits"
